@@ -1,161 +1,847 @@
+
 <!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PortfolioKagbe</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    animation: {
-                        'float': 'float 3s ease-in-out infinite',
-                        'fade-in': 'fadeIn 1s ease-in',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        },
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
     <style>
+        /* Reset et styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333; 
+            background-color: #f8f9fa;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        section {
+            padding: 80px 0;
+        }
+        
+        h1, h2, h3, h4 {
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        ul {
+            list-style: none;
+        }
+        
+        /* Styles spécifiques */
         .gradient-text {
             background: linear-gradient(90deg, #3b82f6, #8b5cf6);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
-        .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
         }
+        
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-outline {
+            border: 2px solid #3b82f6;
+            color: #3b82f6;
+        }
+        
+        .btn-outline:hover {
+            background-color: #ebf2ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark-mode .btn-outline:hover {
+            background-color: #1e293b;
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .dark-mode nav {
+            background-color: rgba(30, 41, 59, 0.8);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #3b82f6;
+        }
+        
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .theme-toggle, .mobile-menu-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .theme-toggle:hover, .mobile-menu-btn:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark-mode .theme-toggle:hover, .dark-mode .mobile-menu-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+        }
+        
+        .mobile-menu {
+            display: none;
+            padding: 20px 0;
+        }
+        
+        .mobile-menu.active {
+            display: block;
+        }
+        
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .mobile-menu-links a {
+            padding: 10px 0;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .mobile-menu-links a:hover {
+            color: #3b82f6;
+        }
+        
+        /* Hero section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+        }
+        
+        .dark-mode .hero {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+        }
+        
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .hero-text {
+            flex: 1;
+        }
+        
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .profile-image {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid #3b82f6;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        /* About section */
+        .about {
+            background-color: #f1f5f9;
+        }
+        
+        .dark-mode .about {
+            background-color: #1e293b;
+        }
+        
+        .about-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        
+        .about-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .about-image {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .about-info {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .about-social {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: transform 0.3s;
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-3px);
+        }
+        
+        /* Skills section */
+        .skills-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+        
+        .skill-category {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .skill-item {
+            margin-bottom: 15px;
+        }
+        
+        .skill-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .skill-bar-container {
+            width: 100%;
+            height: 8px;
+            background-color: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .dark-mode .skill-bar-container {
+            background-color: #10478a;
+        }
+        
         .skill-bar {
+            height: 100%;
+            background-color: #3b82f6;
+            border-radius: 4px;
+            width: 0;
             transition: width 1.5s ease-in-out;
         }
-        .dark .dark\:bg-gradient-dark {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
+        
+        .professional-skills {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .professional-skill {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .dark-mode .professional-skill {
+            background-color: #334155;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .professional-skill:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark-mode .professional-skill:hover {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .skill-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            color: white;
+        }
+        
+        /* Projects section */
+        .projects {
+            background-color: #f1f5f9;
+        }
+        
+        .dark-mode .projects {
+            background-color: #1e293b;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        
+        .project-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .dark-mode .project-card {
+            background-color: #334155;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark-mode .project-card:hover {
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .project-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .project-card:hover .project-image img {
+            transform: scale(1.05);
+        }
+        
+        .project-content {
+            padding: 20px;
+        }
+        
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+        }
+        
+        .project-tag {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .project-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .project-link {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #3b82f6;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .project-link:hover {
+            color: #2563eb;
+        }
+        
+        /* Contact section */
+        .contact-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e0e7ff;
+            color: #3b82f6;
+        }
+        
+        .dark-mode .contact-icon {
+            background-color: #1e3a8a;
+            color: #93c5fd;
+        }
+        
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        label {
+            font-weight: 500;
+        }
+        
+        input, textarea {
+            padding: 12px 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .dark-mode input, .dark-mode textarea {
+            background-color: #334155;
+            border-color: #475569;
+            color: #f8fafc;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #1e293b;
+            color: #f8fafc;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .footer-social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #334155;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        
+        .footer-social-icon:hover {
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid #334155;
+            padding-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .footer-link {
+            transition: color 0.3s;
+        }
+        
+        .footer-link:hover {
+            color: #93c5fd;
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        
+        /* Responsive */
+        @media (min-width: 768px) {
+            .hero-content {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .about-content {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .about-info {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .skills-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 50px;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .contact-container {
+                flex-direction: row;
+            }
+            
+            .contact-info, .contact-form {
+                flex: 1;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .footer-bottom {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .projects-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+            
+            .mobile-menu-btn {
+                display: none;
+            }
+            
+            .nav-links {
+                display: flex;
+            }
+        }
+        
+        @media (max-width: 991px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: flex;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            section {
+                padding: 60px 0;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+            }
+            
+            .professional-skills {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
+<body>
     <!-- Navigation -->
-    <nav class="fixed w-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-md z-50 shadow-sm">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <a href="#" class="text-2xl font-bold gradient-text">Portfolio</a>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#home" class="hover:text-blue-500 transition">Accueil</a>
-                    <a href="#skills" class="hover:text-blue-500 transition">Compétences</a>
-                    <a href="#projects" class="hover:text-blue-500 transition">Projets</a>
-                    <a href="#contact" class="hover:text-blue-500 transition">Contact</a>
-                    <a href="#about" class="hover:text-blue-500 transition">À propos</a>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition">
-                        <i class="fas fa-moon dark:hidden"></i>
-                        <i class="fas fa-sun hidden dark:block"></i>
-                    </button>
-                    <button class="md:hidden p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition" id="mobile-menu-button">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                </div>
+    <nav>
+        <div class="container nav-container">
+            <a href="#" class="logo gradient-text">Portfolio</a>
+            
+            <div class="nav-links">
+                <a href="#home">Accueil</a>
+                <a href="#skills">Compétences</a>
+                <a href="#projects">Projets</a>
+                <a href="#contact">Contact</a>
+                <a href="#about">À propos</a>
             </div>
-            <!-- Mobile menu -->
-            <div class="md:hidden hidden mt-4" id="mobile-menu">
-                <div class="flex flex-col space-y-3">
-                    <a href="#home" class="hover:text-blue-500 transition">Accueil</a>
-                    <a href="#skills" class="hover:text-blue-500 transition">Compétences</a>
-                    <a href="#projects" class="hover:text-blue-500 transition">Projets</a>
-                    <a href="#contact" class="hover:text-blue-500 transition">Contact</a>
-                    <a href="#about" class="hover:text-blue-500 transition">À propos</a>
-                </div>
+            
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-btn" id="mobile-menu-button">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div class="container mobile-menu" id="mobile-menu">
+            <div class="mobile-menu-links">
+                <a href="#home">Accueil</a>
+                <a href="#skills">Compétences</a>
+                <a href="#projects">Projets</a>
+                <a href="#contact">Contact</a>
+                <a href="#about">À propos</a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center pt-20 dark:bg-gradient-dark">
-        <div class="container mx-auto px-6 py-20 flex flex-col md:flex-row items-center">
-            <div class="md:w-1/2 mb-12 md:mb-0 animate-fade-in">
-                <h1 class="text-4xl md:text-6xl font-bold mb-6">Bonjour, je suis <span class="gradient-text">Kagbé Mathias</span></h1>
-                <h2 class="text-2xl md:text-3xl font-semibold mb-6"><span class="typing-effect"></span></h2>
-                <p class="text-lg mb-8 text-gray-600 dark:text-gray-300">Je crée des expériences digitales exceptionnelles avec une attention particulière aux détails et une passion pour l'innovation.</p>
-                <div class="flex space-x-4">
-                    <a href="#contact" class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition shadow-lg">Me contacter</a>
-                    <a href="#projects" class="px-6 py-3 border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-800 transition">Voir mes projets</a>
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Bonjour, je suis <span class="gradient-text">Kagbé Mathias</span></h1>
+                    <h2><span class="typing-effect"></span></h2>
+                    <p>Je crée des expériences digitales exceptionnelles avec une attention particulière aux détails et une passion pour l'innovation.</p>
+                    <div class="hero-buttons">
+                        <a href="#contact" class="btn btn-primary">Me contacter</a>
+                        <a href="#projects" class="btn btn-outline">Voir mes projets</a>
+                    </div>
                 </div>
-            </div>
-            <div class="md:w-1/2 flex justify-center animate-float">
-                <div class="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-blue-500 shadow-xl">
-                    <img src="Cap1.png" 
-                         alt="Photo de profil" 
-                         class="w-full h-full object-cover">
+                <div class="hero-image animate-float">
+                    <div class="profile-image">
+                        <img src="Cap1.png" alt="Photo de profil">
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-20 bg-gray-100 dark:bg-gray-800">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-16 gradient-text">À propos de moi</h2>
-            <div class="flex flex-col md:flex-row items-center">
-                <div class="md:w-1/3 mb-8 md:mb-0 flex justify-center">
-                    <div class="w-64 h-64 rounded-full overflow-hidden border-4 border-blue-500 shadow-lg">
-                        <img src="Cap1.png" 
-                             alt="Photo de profil" 
-                             class="w-full h-full object-cover">
-                    </div>
-                </div>
-                <div class="md:w-2/3 md:pl-12">
-                    <h3 class="text-2xl font-semibold mb-4">Qui suis-je ?</h3>
-                    <p class="mb-6 text-gray-600 dark:text-gray-300">
-                        Je suis un développeur web et mobile avec 3 années d’expérience, 1 année en cybersécurité et 2 ans en administration réseau/système linux. Passionné par le numérique et la protection des systèmes, je conçois des solutions digitales performantes, intuitives et sécurisées.
-                        Mon approche repose sur une combinaison de créativité, rigueur technique et veille constante, afin de livrer des produits qui répondent aux besoins réels des utilisateurs tout en intégrant les bonnes pratiques de sécurité.
-                        Curieux, polyvalent et orienté résultats,chaque projet est pour moi l’opportunité d’innover et de créer de la valeur.
-                    </p>
-                    <div class="grid grid-cols-1 ml-4 md:grid-cols-2 gap-6 mb-8">
-                        <div>
-                            <h4 class="font-semibold mb-2">Nom :</h4>
-                            <p class="text-gray-600 dark:text-gray-300">Kagbe Mathias</p>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold mb-2">Email :</h4>
-                            <p class="text-gray-600 dark:text-gray-300">kagbemathias3@gmail.com</p>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold mb-2">Téléphone :</h4>
-                            <p class="text-gray-600 dark:text-gray-300">+237 657 191 924</p>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold mb-2">Localisation :</h4>
-                            <p class="text-gray-600 dark:text-gray-300">Cameroun, Ngaoundéré</p>
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="text-center gradient-text">À propos de moi</h2>
+            
+            <div class="about-container">
+                <div class="about-content">
+                    <div class="about-image">
+                        <div class="profile-image">
+                            <img src="Cap1.png" alt="Photo de profil">
                         </div>
                     </div>
-                    <div class="flex space-x-4">
-                        <a href="https://www.linkedin.com/" class="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center hover:bg-blue-600 transition">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                        <a href="https://wa.me/237659511100" class="w-10 h-10 rounded-full bg-gray-800 text-white flex items-center justify-center hover:bg-gray-700 transition">
-                            <i class="fab fa-whatsapp"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-pink-500 text-white flex items-center justify-center hover:bg-pink-600 transition">
-                            <i class="fab fa-facebook"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-blue-400 text-white flex items-center justify-center hover:bg-blue-500 transition">
-                            <i class="fab fa-twitter"></i>
-                        </a>
+                    
+                    <div>
+                        <h3>Qui suis-je ?</h3>
+                        <p>
+                            Je suis un développeur web et mobile avec 3 années d'expérience, 1 année en cybersécurité et 2 ans en administration réseau/système linux. Passionné par le numérique et la protection des systèmes, je conçois des solutions digitales performantes, intuitives et sécurisées.
+                            Mon approche repose sur une combinaison de créativité, rigueur technique et veille constante, afin de livrer des produits qui répondent aux besoins réels des utilisateurs tout en intégrant les bonnes pratiques de sécurité.
+                            Curieux, polyvalent et orienté résultats, chaque projet est pour moi l'opportunité d'innover et de créer de la valeur.
+                        </p>
+                        
+                        <div class="about-info">
+                            <div>
+                                <h4>Nom :</h4>
+                                <p>Kagbe Mathias</p>
+                            </div>
+                            <div>
+                                <h4>Email :</h4>
+                                <p>kagbemathias3@gmail.com</p>
+                            </div>
+                            <div>
+                                <h4>Téléphone :</h4>
+                                <p>+237 657 191 924</p>
+                            </div>
+                            <div>
+                                <h4>Localisation :</h4>
+                                <p>Cameroun, Ngaoundéré</p>
+                            </div>
+                        </div>
+                        
+                        <div class="about-social">
+                            <a href="https://www.linkedin.com/" class="social-icon" style="background-color: #0a66c2;">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="https://wa.me/237659511100" class="social-icon" style="background-color: #25d366;">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <a href="#" class="social-icon" style="background-color: #1877f2;">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="social-icon" style="background-color: #1da1f2;">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -163,102 +849,109 @@
     </section>
 
     <!-- Skills Section -->
-    <section id="skills" class="py-20">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-16 gradient-text">Mes Compétences</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <div>
-                    <h3 class="text-xl font-semibold mb-6">Technologies</h3>
-                    <div class="space-y-6">
-                        <div>
-                            <div class="flex justify-between mb-2">
-                                <span>HTML/CSS</span>
-                                <span>90%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                <div class="skill-bar bg-blue-500 h-2.5 rounded-full" style="width: 90%"></div>
-                            </div>
+    <section id="skills">
+        <div class="container">
+            <h2 class="text-center gradient-text">Mes Compétences</h2>
+            
+            <div class="skills-container">
+                <div class="skill-category">
+                    <h3>Technologies</h3>
+                    
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span>HTML/CSS</span>
+                            <span>90%</span>
                         </div>
-                        <div>
-                            <div class="flex justify-between mb-2">
-                                <span>JavaScript</span>
-                                <span>75%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                <div class="skill-bar bg-blue-500 h-2.5 rounded-full" style="width: 75%"></div>
-                            </div>
+                        <div class="skill-bar-container">
+                            <div class="skill-bar" style="width: 90%;"></div>
                         </div>
-                        <div>
-                            <div class="flex justify-between mb-2">
-                                <span>React</span>
-                                <span>70%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                <div class="skill-bar bg-blue-500 h-2.5 rounded-full" style="width: 70%"></div>
-                            </div>
+                    </div>
+                    
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span>JavaScript</span>
+                            <span>75%</span>
                         </div>
-                        <div>
-                            <div class="flex justify-between mb-2">
-                                <span>Node.js</span>
-                                <span>55%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                <div class="skill-bar bg-blue-500 h-2.5 rounded-full" style="width: 55%"></div>
-                            </div>
-                            
+                        <div class="skill-bar-container">
+                            <div class="skill-bar" style="width: 75%;"></div>
                         </div>
-                        <div>
-                            <div class="flex justify-between mb-2">
-                                <span>Java</span>
-                                <span>40%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                <div class="skill-bar bg-blue-500 h-2.5 rounded-full" style="width: 40%"></div>
-                            </div>
-                            
+                    </div>
+                    
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span>React</span>
+                            <span>70%</span>
                         </div>
-                        <div>
-                            <div class="flex justify-between mb-2">
-                                <span>Sprimt-Boot</span>
-                                <span>35%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                <div class="skill-bar bg-blue-500 h-2.5 rounded-full" style="width: 35%"></div>
-                            </div>
-                            
+                        <div class="skill-bar-container">
+                            <div class="skill-bar" style="width: 70%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span>Node.js</span>
+                            <span>55%</span>
+                        </div>
+                        <div class="skill-bar-container">
+                            <div class="skill-bar" style="width: 55%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span>Java</span>
+                            <span>40%</span>
+                        </div>
+                        <div class="skill-bar-container">
+                            <div class="skill-bar" style="width: 40%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span>Spring-Boot</span>
+                            <span>35%</span>
+                        </div>
+                        <div class="skill-bar-container">
+                            <div class="skill-bar" style="width: 35%;"></div>
                         </div>
                     </div>
                 </div>
-                <div>
-                    <h3 class="text-xl font-semibold mb-6">Professionnelles</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition">
-                            <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-3">
-                                <i class="fas fa-users text-blue-500"></i>
+                
+                <div class="skill-category">
+                    <h3>Professionnelles</h3>
+                    
+                    <div class="professional-skills">
+                        <div class="professional-skill">
+                            <div class="skill-icon" style="background-color: #3b82f6;">
+                                <i class="fas fa-users"></i>
                             </div>
-                            <h4 class="font-semibold mb-2">Travail d'équipe</h4>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Collaboration efficace avec les équipes pluridisciplinaires.</p>
+                            <h4>Travail d'équipe</h4>
+                            <p>Collaboration efficace avec les équipes pluridisciplinaires.</p>
                         </div>
-                        <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition">
-                            <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mb-3">
-                                <i class="fas fa-lightbulb text-green-500"></i>
+                        
+                        <div class="professional-skill">
+                            <div class="skill-icon" style="background-color: #10b981;">
+                                <i class="fas fa-lightbulb"></i>
                             </div>
-                            <h4 class="font-semibold mb-2">Résolution de problèmes</h4>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Approche analytique pour résoudre les défis complexes.</p>
+                            <h4>Résolution de problèmes</h4>
+                            <p>Approche analytique pour résoudre les défis complexes.</p>
                         </div>
-                        <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition">
-                            <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mb-3">
-                                <i class="fas fa-comments text-purple-500"></i>
+                        
+                        <div class="professional-skill">
+                            <div class="skill-icon" style="background-color: #8b5cf6;">
+                                <i class="fas fa-comments"></i>
                             </div>
-                            <h4 class="font-semibold mb-2">Communication</h4>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Échange clair avec les clients et les collègues.</p>
+                            <h4>Communication</h4>
+                            <p>Échange clair avec les clients et les collègues.</p>
                         </div>
-                        <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition">
-                            <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center mb-3">
-                                <i class="fas fa-clock text-yellow-500"></i>
+                        
+                        <div class="professional-skill">
+                            <div class="skill-icon" style="background-color: #f59e0b;">
+                                <i class="fas fa-clock"></i>
                             </div>
-                            <h4 class="font-semibold mb-2">Gestion du temps</h4>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Respect des délais et priorisation efficace.</p>
+                            <h4>Gestion du temps</h4>
+                            <p>Respect des délais et priorisation efficace.</p>
                         </div>
                     </div>
                 </div>
@@ -267,31 +960,32 @@
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="py-20 bg-gray-100 dark:bg-gray-800">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-16 gradient-text">Mes Projets</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2 class="text-center gradient-text">Mes Projets</h2>
+            
+            <div class="projects-grid">
                 <!-- Project 1 -->
-                <div class="project-card bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-md transition duration-300">
-                    <div class="h-48 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
-                             alt="Projet 1" 
-                             class="w-full h-full object-cover">
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Projet 1">
                     </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold mb-2">Application de Location et de Réservation des Chambres dans la Cité Universitaire</h3>
-                        <p class="text-gray-600 dark:text-gray-300 mb-4">Plateforme complète avec paiement et gestion d'inventaire.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded">HTML/CSS</span>
-                            <span class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs rounded">MySql</span>
-                            <span class="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs rounded">JavaScript</span>
-                            <span class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs rounded">PHP</span>
+                    <div class="project-content">
+                        <h3>Application de Location et de Réservation des Chambres dans la Cité Universitaire</h3>
+                        <p>Plateforme complète avec paiement et gestion d'inventaire.</p>
+                        
+                        <div class="project-tags">
+                            <span class="project-tag" style="background-color: #e0e7ff; color: #1e40af;">HTML/CSS</span>
+                            <span class="project-tag" style="background-color: #dcfce7; color: #166534;">MySql</span>
+                            <span class="project-tag" style="background-color: #ede9fe; color: #5b21b6;">JavaScript</span>
+                            <span class="project-tag" style="background-color: #dcfce7; color: #166534;">PHP</span>
                         </div>
-                        <div class="flex space-x-3">
-                            <a href="#" class="text-blue-500 hover:text-blue-600 transition">
+                        
+                        <div class="project-links">
+                            <a href="#" class="project-link">
                                 <i class="fas fa-external-link-alt"></i> Voir le projet
                             </a>
-                            <a href="#" class="text-gray-500 hover:text-gray-600 transition">
+                            <a href="#" class="project-link">
                                 <i class="fab fa-github"></i> Code source
                             </a>
                         </div>
@@ -299,25 +993,25 @@
                 </div>
                 
                 <!-- Project 2 -->
-                <div class="project-card bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-md transition duration-300">
-                    <div class="h-48 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80" 
-                             alt="Projet 2" 
-                             class="w-full h-full object-cover">
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80" alt="Projet 2">
                     </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold mb-2">Application Mobile de Quiz</h3>
-                        <p class="text-gray-600 dark:text-gray-300 mb-4">Questions-Reponses Académique.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded">Java</span>
-                            <span class="px-2 py-1 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 text-xs rounded">Sqlite</span>
-                            <span class="px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 text-xs rounded">Xml</span>
+                    <div class="project-content">
+                        <h3>Application Mobile de Quiz</h3>
+                        <p>Questions-Reponses Académique.</p>
+                        
+                        <div class="project-tags">
+                            <span class="project-tag" style="background-color: #e0e7ff; color: #1e40af;">Java</span>
+                            <span class="project-tag" style="background-color: #fee2e2; color: #991b1b;">Sqlite</span>
+                            <span class="project-tag" style="background-color: #fef3c7; color: #92400e;">Xml</span>
                         </div>
-                        <div class="flex space-x-3">
-                            <a href="#" class="text-blue-500 hover:text-blue-600 transition">
+                        
+                        <div class="project-links">
+                            <a href="#" class="project-link">
                                 <i class="fas fa-external-link-alt"></i> Voir le projet
                             </a>
-                            <a href="#" class="text-gray-500 hover:text-gray-600 transition">
+                            <a href="#" class="project-link">
                                 <i class="fab fa-github"></i> Code source
                             </a>
                         </div>
@@ -325,33 +1019,34 @@
                 </div>
                 
                 <!-- Project 3 -->
-                <div class="project-card bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-md transition duration-300">
-                    <div class="h-48 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
-                             alt="Projet 3" 
-                             class="w-full h-full object-cover">
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Projet 3">
                     </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold mb-2">Carte Scolaire</h3>
-                        <p class="text-gray-600 dark:text-gray-300 mb-4">Géolocaliser les etablissements en temps réel avec filtres avancés.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded">React.js</span>
-                            <span class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs rounded">Sprint-Boot</span>
-                            <span class="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs rounded">Boostrap</span>
+                    <div class="project-content">
+                        <h3>Carte Scolaire</h3>
+                        <p>Géolocaliser les etablissements en temps réel avec filtres avancés.</p>
+                        
+                        <div class="project-tags">
+                            <span class="project-tag" style="background-color: #e0e7ff; color: #1e40af;">React.js</span>
+                            <span class="project-tag" style="background-color: #dcfce7; color: #166534;">Spring-Boot</span>
+                            <span class="project-tag" style="background-color: #ede9fe; color: #5b21b6;">Bootstrap</span>
                         </div>
-                        <div class="flex space-x-3">
-                            <a href="#" class="text-blue-500 hover:text-blue-600 transition">
+                        
+                        <div class="project-links">
+                            <a href="#" class="project-link">
                                 <i class="fas fa-external-link-alt"></i> Voir le projet
                             </a>
-                            <a href="https://github.com/Kagbe/ProjetFinalGenie" class="text-gray-500 hover:text-gray-600 transition">
+                            <a href="https://github.com/Kagbe/ProjetFinalGenie" class="project-link">
                                 <i class="fab fa-github"></i> Code source
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
+            
             <div class="text-center mt-12">
-                <a href="#" class="px-6 py-3 border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 transition inline-flex items-center">
+                <a href="#" class="btn btn-outline">
                     Voir plus de projets <i class="fas fa-arrow-right ml-2"></i>
                 </a>
             </div>
@@ -359,105 +1054,112 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-20">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-16 gradient-text">Contactez-moi</h2>
-            <div class="flex flex-col md:flex-row">
-                <div class="md:w-1/2 mb-12 md:mb-0 md:pr-12">
-                    <h3 class="text-2xl font-semibold mb-6">Discutons de votre projet</h3>
-                    <p class="text-gray-600 dark:text-gray-300 mb-8">
+    <section id="contact">
+        <div class="container">
+            <h2 class="text-center gradient-text">Contactez-moi</h2>
+            
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Discutons de votre projet</h3>
+                    <p>
                         Vous avez un projet en tête ou souhaitez en savoir plus sur mon travail ? 
                         N'hésitez pas à me contacter. Je serai ravi d'échanger avec vous.
                     </p>
-                    <div class="space-y-6">
-                        <div class="flex items-start">
-                            <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mr-4">
-                                <i class="fas fa-envelope text-blue-500"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold">Email</h4>
-                                <p class="text-gray-600 dark:text-gray-300">kagbemathias3@gmail.com</p>
-                            </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
                         </div>
-                        <div class="flex items-start">
-                            <div class="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mr-4">
-                                <i class="fas fa-phone-alt text-green-500"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold">Téléphone</h4>
-                                <p class="text-gray-600 dark:text-gray-300">+237 657 191 924</p>
-                            </div>
+                        <div>
+                            <h4>Email</h4>
+                            <p>kagbemathias3@gmail.com</p>
                         </div>
-                        <div class="flex items-start">
-                            <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mr-4">
-                                <i class="fas fa-map-marker-alt text-purple-500"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold">Localisation</h4>
-                                <p class="text-gray-600 dark:text-gray-300">Cameroun, Ngaoundéré</p>
-                            </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div>
+                            <h4>Téléphone</h4>
+                            <p>+237 657 191 924</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <h4>Localisation</h4>
+                            <p>Cameroun, Ngaoundéré</p>
                         </div>
                     </div>
                 </div>
-                <div class="md:w-1/2">
-                    <form class="space-y-6" action="https://docs.google.com/forms/d/e/1FAIpQLSfw0MO9Jzm3v1lFjFUTNf5cmmc6Ryh6adB0igj895GruojoYA/formResponse" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="name" class="block mb-2 font-medium">Nom complet</label>
-                                <input type="text" name="entry.2005620554" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600" required>
-                            </div>
-                            <div>
-                                <label for="email" class="block mb-2 font-medium">Email</label>
-                                <input type="email" name="entry.1045781291" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600" required>
-                            </div>
+                
+                <form class="contact-form" action="https://docs.google.com/forms/d/e/1FAIpQLSfw0MO9Jzm3v1lFjFUTNf5cmmc6Ryh6adB0igj895GruojoYA/formResponse" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Nom complet</label>
+                            <input type="text" id="name" name="entry.2005620554" required>
                         </div>
-                        <div>
-                            <label for="subject" class="block mb-2 font-medium">Sujet</label>
-                            <input type="text" id="subject" name="entry.1166974658" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600" required>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="entry.1045781291" required>
                         </div>
-                        <div>
-                            <label for="message" class="block mb-2 font-medium">Message</label>
-                            <textarea id="message" rows="5" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600" required name="entry.839337160"></textarea>
-                        </div>
-                        <button type="submit" class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition w-full md:w-auto">
-                            Envoyer le message
-                        </button>
-                    </form>
-                    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-                </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Sujet</label>
+                        <input type="text" id="subject" name="entry.1166974658" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea style="resize: none;" id="message" name="entry.839337160" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Envoyer le message</button>
+                </form>
+                <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-12">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-6 md:mb-0">
-                    <a href="#" class="text-2xl font-bold gradient-text">Portfolio</a>
-                    <p class="mt-2 text-gray-400">Créateur d'expériences digitales exceptionnelles</p>
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-content">
+                    <div>
+                        <a href="#" class="footer-logo gradient-text">Portfolio</a>
+                        <p class="mt-2">Créateur d'expériences digitales exceptionnelles</p>
+                    </div>
+                    
+                    <div class="footer-social">
+                        <a href="#" class="footer-social-icon" style="background-color: #0a66c2;">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="footer-social-icon" style="background-color: #333;">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://wa.me/237659511100" class="footer-social-icon" style="background-color: #25d366;">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="#" class="footer-social-icon" style="background-color: #1da1f2;">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="flex space-x-6">
-                    <a href="" class="w-10 h-10 rounded-full bg-gray-700 hover:bg-blue-500 transition flex items-center justify-center">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-gray-700 hover:bg-gray-600 transition flex items-center justify-center">
-                        <i class="fab fa-github"></i>
-                    </a>
-                    <a href="https://wa.me/237659511100" class="w-10 h-10 rounded-full bg-gray-700 hover:bg-pink-500 transition flex items-center justify-center">
-                        <i class="fab fa-whatsapp"></i>
-                    </a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-gray-700 hover:bg-blue-400 transition flex items-center justify-center">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-gray-400 mb-4 md:mb-0">© 2023 Kagbé. Tous droits réservés.</p>
-                <div class="flex space-x-6">
-                    <a href="#" class="text-gray-400 hover:text-white transition">Mentions légales</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition">Politique de confidentialité</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition">Conditions d'utilisation</a>
+                
+                <div class="footer-bottom">
+                    <p>© 2023 Kagbé. Tous droits réservés.</p>
+                    
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">Mentions légales</a>
+                        <a href="#" class="footer-link">Politique de confidentialité</a>
+                        <a href="#" class="footer-link">Conditions d'utilisation</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -469,7 +1171,7 @@
         const mobileMenu = document.getElementById('mobile-menu');
         
         mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+            mobileMenu.classList.toggle('active');
         });
 
         // Dark mode toggle
@@ -477,20 +1179,31 @@
         const html = document.documentElement;
         
         themeToggle.addEventListener('click', () => {
-            html.classList.toggle('dark');
-            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+            html.classList.toggle('dark-mode');
+            localStorage.setItem('theme', html.classList.contains('dark-mode') ? 'gris' : 'light');
+            
+            // Update icon
+            const icon = themeToggle.querySelector('i');
+            if (html.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
         });
 
         // Check for saved theme preference
         if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            html.classList.add('dark');
-        } else {
-            html.classList.remove('dark');
+            html.classList.add('dark-mode');
+            const icon = themeToggle.querySelector('i');
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
         }
 
         // Typing effect
         const typingElement = document.querySelector('.typing-effect');
-        const professions = ['Développeur Full Stack', 'Créateur Digital', 'Administrateur Réseau/Système','Cybersécurité', 'Formateur' ];
+        const professions = ['Développeur Full Stack', 'Créateur Digital', 'Administrateur Réseau/Système', 'Cybersécurité', 'Formateur'];
         let professionIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
@@ -568,8 +1281,8 @@
                     });
                     
                     // Close mobile menu if open
-                    if (!mobileMenu.classList.contains('hidden')) {
-                        mobileMenu.classList.add('hidden');
+                    if (mobileMenu.classList.contains('active')) {
+                        mobileMenu.classList.remove('active');
                     }
                 }
             });
